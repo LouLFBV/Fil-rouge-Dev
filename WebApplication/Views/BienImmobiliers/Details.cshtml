@@ -1,0 +1,69 @@
+﻿@model WebApplication.Models.BienImmobilier
+
+@{
+    ViewData["Title"] = "Détails du bien - Ymmo";
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index">Catalogue</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Fiche détaillée</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h1 class="text-primary mb-0">@Model.Titre</h1>
+                        <span class="badge bg-info text-dark fs-6">@Model.Type</span>
+                    </div>
+                    <p class="text-muted"><i class="bi bi-geo-alt-fill text-danger"></i> @Model.Ville</p>
+                    <hr />
+                    <h5 class="fw-bold mt-4">Description du bien</h5>
+                    <p class="lead" style="white-space: pre-wrap;">@Model.Description</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card bg-primary text-white shadow-sm border-0 mb-4 text-center">
+                <div class="card-body py-4">
+                    <h2 class="mb-0 fw-bold">@Model.Prix.ToString("N0") €</h2>
+                    <small>Honoraires d'agence inclus</small>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-arrows-fullscreen me-2"></i> Surface</span>
+                            <span class="fw-bold">@Model.Surface m²</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-tag me-2"></i> Type</span>
+                            <span class="fw-bold">@Model.Type</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center text-muted">
+                            <span><i class="bi bi-hash me-2"></i> Réf. Agence</span>
+                            <span>@Model.AgenceId</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary btn-lg">
+                    <i class="bi bi-pencil"></i> Modifier la fiche
+                </a>
+                <a asp-action="Index" class="btn btn-light text-secondary">
+                    <i class="bi bi-arrow-left"></i> Retour au catalogue
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

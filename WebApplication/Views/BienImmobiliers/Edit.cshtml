@@ -1,0 +1,102 @@
+﻿@model WebApplication.Models.BienImmobilier
+
+@{
+    ViewData["Title"] = "Modifier le bien - Ymmo";
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index">Catalogue</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Modifier le bien</li>
+        </ol>
+    </nav>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-warning text-dark py-3">
+            <h3 class="card-title mb-0"><i class="bi bi-pencil-square"></i> Modification du bien : @Model.Titre</h3>
+        </div>
+        <div class="card-body p-4">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <input type="hidden" asp-for="Id" />
+
+                <div class="row">
+                    <div class="col-md-7 border-end">
+                        <div class="form-group mb-3">
+                            <label asp-for="Titre" class="form-label fw-bold"></label>
+                            <input asp-for="Titre" class="form-control" />
+                            <span asp-validation-for="Titre" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Description" class="form-label fw-bold"></label>
+                            <textarea asp-for="Description" class="form-control" rows="6">@Model.Description</textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-5 ps-md-4">
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label asp-for="Prix" class="form-label fw-bold"></label>
+                                <div class="input-group">
+                                    <input asp-for="Prix" class="form-control" />
+                                    <span class="input-group-text">€</span>
+                                </div>
+                                <span asp-validation-for="Prix" class="text-danger"></span>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label asp-for="Surface" class="form-label fw-bold"></label>
+                                <div class="input-group">
+                                    <input asp-for="Surface" class="form-control" />
+                                    <span class="input-group-text">m²</span>
+                                </div>
+                                <span asp-validation-for="Surface" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Ville" class="form-label fw-bold"></label>
+                            <input asp-for="Ville" class="form-control" />
+                            <span asp-validation-for="Ville" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Type" class="form-label fw-bold"></label>
+                            <select asp-for="Type" class="form-select">
+                                <option value="Appartement">Appartement</option>
+                                <option value="Maison">Maison</option>
+                                <option value="Terrain">Terrain</option>
+                                <option value="Local Commercial">Local Commercial</option>
+                            </select>
+                            <span asp-validation-for="Type" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label asp-for="AgenceId" class="form-label fw-bold">ID Agence</label>
+                            <input asp-for="AgenceId" class="form-control" type="number" />
+                            <span asp-validation-for="AgenceId" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <a asp-action="Index" class="text-secondary"><i class="bi bi-arrow-left"></i> Retour sans enregistrer</a>
+                    <button type="submit" class="btn btn-warning px-5 fw-bold">
+                        <i class="bi bi-save"></i> Enregistrer les modifications
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

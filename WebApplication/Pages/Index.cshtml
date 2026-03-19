@@ -1,0 +1,38 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Accueil - Ymmo";
+}
+
+<div class="container mt-5">
+    <div class="jumbotron text-center bg-light p-5 shadow-sm rounded">
+        <h1 class="display-4 text-primary">Bienvenue chez Ymmo</h1>
+        <p class="lead">La plateforme centralisée de gestion immobilière pour nos 12 agences.</p>
+        <hr class="my-4">
+        <p>Gérez vos biens immobiliers, suivez vos ventes et optimisez votre relation client depuis Aix-en-Provence.</p>
+
+        <div class="d-grid gap-2 d-md-block mt-4">
+            <a class="btn btn-primary btn-lg" asp-controller="BienImmobiliers" asp-action="Index">
+                <i class="bi bi-house-door"></i> Accéder au catalogue
+            </a>
+            <a class="btn btn-outline-secondary btn-lg" asp-page="/Privacy">
+                En savoir plus
+            </a>
+        </div>
+    </div>
+
+    <div class="row mt-5 text-center">
+        <div class="col-md-4">
+            <h3>12 Agences</h3>
+            <p>Un réseau solide sur tout le territoire.</p>
+        </div>
+        <div class="col-md-4">
+            <h3>Expertise</h3>
+            <p>Plus de 20 ans d'expérience dans l'immobilier.</p>
+        </div>
+        <div class="col-md-4">
+            <h3>Innovation</h3>
+            <p>Une gestion 100% digitale et sécurisée.</p>
+        </div>
+    </div>
+</div>
