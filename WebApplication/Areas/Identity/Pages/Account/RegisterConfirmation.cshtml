@@ -1,0 +1,48 @@
+﻿@page
+@model RegisterConfirmationModel
+@{
+    ViewData["Title"] = "Confirmation d'inscription - Ymmo Pro";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-info text-white py-3">
+                    <h4 class="mb-0 text-center"><i class="bi bi-envelope-check"></i> Vérification du compte</h4>
+                </div>
+                <div class="card-body p-5 text-center">
+                    <div class="mb-4">
+                        <i class="bi bi-send-check text-success" style="font-size: 3rem;"></i>
+                    </div>
+
+                    <h2 class="h4 mb-3">Presque terminé !</h2>
+                    <p class="text-muted">
+                        Votre demande d'accès au réseau <strong>Ymmo Pro</strong> a été enregistrée.
+                        En production, un email de validation vous serait envoyé.
+                    </p>
+
+                    @if (@Model.DisplayConfirmAccountLink)
+                    {
+                        <div class="alert alert-warning border-0 shadow-sm my-4">
+                            <p class="mb-2"><strong>Mode Développement :</strong></p>
+                            <p>Veuillez cliquer sur le bouton ci-dessous pour simuler la validation de votre adresse email.</p>
+                            <a id="confirm-link" class="btn btn-primary btn-lg px-5 mt-2" href="@Model.EmailConfirmationUrl">
+                                <i class="bi bi-check-circle"></i> Confirmer mon compte maintenant
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="alert alert-info">
+                            Veuillez consulter votre boîte de réception pour confirmer votre inscription.
+                        </p>
+                    }
+                </div>
+                <div class="card-footer bg-light text-center py-3">
+                    <small class="text-muted">Ymmo Pro - Gestion immobilière sécurisée</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

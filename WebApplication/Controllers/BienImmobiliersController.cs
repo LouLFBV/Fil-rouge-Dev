@@ -10,6 +10,7 @@ using WebApplication.Models;
 
 namespace WebApplication.Controllers
 {
+    [Microsoft.AspNetCore.Authorization.Authorize]
     public class BienImmobiliersController : Controller
     {
         private readonly WebApplicationContext _context;
@@ -20,9 +21,37 @@ namespace WebApplication.Controllers
         }
 
         // GET: BienImmobiliers
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString, string typeBien, int? prixMax, string ville)
         {
-            return View(await _context.BienImmobilier.ToListAsync());
+            // On récupère la liste de base
+            var biens = from b in _context.BienImmobilier
+                        select b;
+
+            // Filtre par Titre ou Description
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                biens = biens.Where(s => s.Titre.Contains(searchString) || s.Description.Contains(searchString));
+            }
+
+            // Filtre par Ville
+            if (!string.IsNullOrEmpty(ville))
+            {
+                biens = biens.Where(x => x.Ville == ville);
+            }
+
+            // Filtre par Type (Maison, Appartement...)
+            if (!string.IsNullOrEmpty(typeBien))
+            {
+                biens = biens.Where(x => x.Type == typeBien);
+            }
+
+            // Filtre par Prix Maximum
+            if (prixMax.HasValue)
+            {
+                biens = biens.Where(x => x.Prix <= prixMax);
+            }
+
+            return View(await biens.ToListAsync());
         }
 
 

@@ -1,22 +1,78 @@
+/* --- Variables et Bases --- */
+:root {
+    --primary-color: #0d6efd; /* Le bleu de ta navbar */
+    --secondary-color: #6c757d;
+    --light-bg: #f8f9fa;
+    --card-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
 html {
-  font-size: 14px;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    html {
+        font-size: 16px;
+    }
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-color: #f4f7f6; /* Un gris très léger pour faire ressortir les cartes blanches */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* --- Barre de Recherche / Filtres --- */
+.card.bg-light {
+    border-radius: 12px !important;
+    border: none !important;
+    box-shadow: var(--card-shadow);
+    margin-top: 20px;
+}
+
+/* --- Cartes des Biens Immobiliers --- */
+.card {
+    transition: all 0.3s ease-in-out;
+    border-radius: 10px;
+}
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+    }
+
+/* Gestion de l'image pour éviter l'effet géant de ta capture */
+.card-img-top {
+    height: 220px;
+    object-fit: cover; /* Recadre l'image proprement */
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+/* --- Badges et Typographie --- */
+.badge.bg-primary {
+    padding: 8px 12px;
+    font-weight: 500;
+}
+
+.text-primary.fw-bold {
+    font-size: 1.25rem;
+    color: var(--primary-color) !important;
+}
+
+.card-title {
+    font-size: 1.1rem;
+    height: 2.4em; /* Garde les titres sur 2 lignes max */
+    overflow: hidden;
+}
+
+/* --- Footer --- */
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
 }
