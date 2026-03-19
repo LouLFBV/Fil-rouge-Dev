@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>IA Immo Strategist</title>
+    <link rel="stylesheet" href="style.css"> </head>
+<body>
+    <div class="container">
+        <h1>Analyseur Immobilier Pro</h1>
+        <div class="search-box">
+            <input type="text" id="zipInput" placeholder="Code Postal (ex: 33000)">
+            <button id="btnAnalyse">Analyser le Marché</button>
+        </div>
+
+        <div id="loader" style="display:none;">⏳ Analyse des données en cours...</div>
+
+        <div id="results" style="display:none;">
+            <h2 id="cityName"></h2>
+            <p>Prix moyen calculé : <strong id="avgPrice"></strong></p>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Surface</th>
+                        <th>Prix</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="data-sample.js"></script>
+    <script src="api-logic.js"></script>
+</body>
+</html>
