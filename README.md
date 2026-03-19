@@ -11,37 +11,12 @@
 
 ⚡ L'API DPE (Diagnostic de Performance Énergétique)Gérée par l'ADEME, elle recense la santé énergétique des bâtiments.Source : data.ademe.frDonnées clés :classe_consommation_energie : Note de A à G.estimation_cout_annuel_energie : Coût des factures.Usage Stratégique : Identifier les "passoires thermiques" (F ou G) pour négocier une forte décote à l'achat.
 
-🛠️ 2. Étapes d'Intégration (Pas à Pas)
+Architecture logicielle et choix technologiques :
 
-Étape A : Géocodage (L'Adresse vers les Coordonnées)Avant d'interroger DVF ou DPE, vous devez transformer une adresse (ex: "10 rue de la Paix") en coordonnées GPS.Outil : API Adresse (BAN) — Gratuit.Action : Récupérer la latitude, la longitude et le code_insee.
+Interface Frontend (HTML5 / CSS3) : Développement d'une Single Page Application (SPA) minimaliste privilégiant une expérience utilisateur (UX) fluide pour les agents immobiliers sur le terrain. L'interface est conçue pour être "responsive", permettant une consultation sur tablette ou poste fixe en agence.
 
-Étape B : Extraction des Ventes (DVF)Interrogez l'API DVF avec le code commune ou la section cadastrale.Exemple de requête :GET https://dvf-api.data.gouv.fr/api/v1/mutations/?code_commune=33063 (Bordeaux)
+Logique de traitement (JavaScript ES6) : Utilisation d'un moteur asynchrone pour la manipulation des données foncières. Le script assure le nettoyage des données (filtrage des dépendances et valeurs aberrantes), le calcul des moyennes pondérées par zone géographique et l'analyse prédictive de négociation.
 
-Étape C : Calcul de l'IA de TendanceUtilisez une logique simple pour générer un conseil stratégique :Moyenne du quartier : Calculez le prix moyen au m^2 sur les 2 dernières années.Comparaison : Si le bien visé est 15% moins cher que la moyenne ET que son DPE est mauvais (G).Verdict : Afficher "Opportunité de rénovation à forte rentabilité".
+Interopérabilité (API REST) : L'application communique avec l'API Géo de l'État pour la normalisation des données (conversion Code Postal vers Code INSEE). Ce choix garantit l'intégrité des données de recherche avant l'interrogation des bases de données de transactions.
 
-💻 3. Exemple de Code (Python / Backend)Voici comment automatiser la récupération du prix moyen d'une ville :
-
-
-``` 
-import requests
-
-def get_market_trend(code_insee):
-    url = f"https://dvf-api.data.gouv.fr/api/v1/mutations/?code_commune={code_insee}"
-    response = requests.get(url)
-    
-    if response.status_code == 200:
-        ventes = response.json()['results']
-        prices_per_m2 = []
-        
-        for v in ventes:
-            if v['valeur_fonciere'] and v['surface_reelle_bati']:
-                price = v['valeur_fonciere'] / v['surface_reelle_bati']
-                prices_per_m2.append(price)
-        
-        moyenne = sum(prices_per_m2) / len(prices_per_m2)
-        return round(moyenne, 2)
-    return None
-```
-
-# Utilisation pour Bordeaux
-print(f"Prix moyen m2 à Bordeaux : {get_market_trend('33063')} €")
+Stratégie de résilience (Mocking Data) : Pour pallier les limites de connectivité et les restrictions de sécurité (CORS) des API publiques, une couche de données locale a été implémentée. Cette architecture permet la continuité de service en cas d'indisponibilité des serveurs gouvernementaux, assurant ainsi aux 12 agences un outil opérationnel en toute circonstance

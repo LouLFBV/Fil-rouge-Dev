@@ -14,6 +14,14 @@
 
         <div id="loader" style="display:none;">⏳ Analyse des données en cours...</div>
 
+        <div id="simulateur" style="margin: 20px 0; padding: 15px; border: 2px dashed #3498db; border-radius: 8px; display:none;">
+            <h3>🎯 Simulateur de Négociation</h3>
+            <input type="number" id="prixBien" placeholder="Prix du bien visé (€)">
+            <input type="number" id="surfaceBien" placeholder="Surface (m²)">
+            <button onclick="calculerStrategie()">Calculer l'opportunité</button>
+            <div id="verdict" style="margin-top:10px; font-weight:bold;"></div>
+        </div>
+
         <div id="results" style="display:none;">
             <h2 id="cityName"></h2>
             <p>Prix moyen calculé : <strong id="avgPrice"></strong></p>
