@@ -5,6 +5,14 @@
 }
 
 <div class="container mt-4">
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="d-flex justify-content-end mb-3">
+            <a asp-action="Create" class="btn btn-success fw-bold shadow-sm">
+                <i class="bi bi-plus-circle"></i> Ajouter un nouveau bien
+            </a>
+        </div>
+    }
     <div class="card shadow-sm border-0 mb-5 bg-light">
         <div class="card-body p-4">
             <form asp-action="Index" method="get" class="row g-3">
