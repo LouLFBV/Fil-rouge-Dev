@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplication.Models
 {
@@ -27,5 +28,10 @@ namespace WebApplication.Models
 
         // Liaison avec l'agence (pour le côté centralisé)
         public int AgenceId { get; set; }
+
+        public string? ImageUrl { get; set; }
+
+        [NotMapped]
+        public IFormFile? ImageFichier { get; set; }
     }
 }

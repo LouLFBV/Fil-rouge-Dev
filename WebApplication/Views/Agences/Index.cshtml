@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Nos Agences";
+}
+
+<div class="container mt-4">
+    <div class="p-5 mb-4 bg-light rounded-3 shadow-sm border-0 bg-gradient text-dark position-relative overflow-hidden" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+        <div class="container-fluid py-3">
+            <h1 class="display-5 fw-bold text-primary"><i class="bi bi-building"></i> Notre Réseau National</h1>
+            <p class="col-md-8 fs-5 text-muted">Ymmo centralise ses opérations depuis son siège social à Aix-en-Provence et s'appuie sur un réseau interconnecté de agences locales sur tout le territoire.</p>
+            <span class="badge bg-info p-2 shadow-sm"><i class="bi bi-shield-lock-fill"></i> Interconnexion VPN/IPSec sécurisée active</span>
+        </div>
+    </div>
+
+    <h3 class="fw-bold mb-4 text-secondary"><i class="bi bi-geo-alt"></i> Cartographie des agences actives</h3>
+
+    <div class="row">
+        @foreach (var agence in ViewBag.Agences)
+        {
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 shadow-sm border-0 border-start border-4 @(agence.Id == 1 ? "border-primary" : "border-success")">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="card-title fw-bold text-dark mb-0">@agence.Nom</h5>
+                            <span class="badge @(agence.Id == 1 ? "bg-primary" : "bg-success")">@agence.Type</span>
+                        </div>
+                        <p class="text-muted small mb-3"><i class="bi bi-map"></i> @agence.Adresse</p>
+
+                        <div class="bg-light p-2 rounded d-flex justify-content-between text-center small">
+                            <div>
+                                <span class="text-muted d-block">Effectif</span>
+                                <strong class="text-dark"><i class="bi bi-people-fill"></i> @agence.Effectif</strong>
+                            </div>
+                            <div>
+                                <span class="text-muted d-block">Infrastructure</span>
+                                <strong class="text-dark"><i class="bi bi-cpu-fill"></i> Liaison LAN/VPN</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

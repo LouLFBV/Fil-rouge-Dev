@@ -13,48 +13,62 @@
             </a>
         </div>
     }
-    <div class="card shadow-sm border-0 mb-5 bg-light">
-        <div class="card-body p-4">
-            <form asp-action="Index" method="get" class="row g-3">
-                <div class="col-md-3">
-                    <label class="form-label fw-bold">Recherche libre</label>
-                    <input type="text" name="searchString" class="form-control" placeholder="Ex: Jardin, calme..." />
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label fw-bold">Ville</label>
-                    <input type="text" name="ville" class="form-control" placeholder="Ex: Aix-en-Provence" />
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label fw-bold">Type</label>
-                    <select name="typeBien" class="form-select">
-                        <option value="">Tous les types</option>
-                        <option value="Appartement">Appartement</option>
-                        <option value="Maison">Maison</option>
-                        <option value="Terrain">Terrain</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label fw-bold">Prix max</label>
-                    <div class="input-group">
-                        <input type="number" name="prixMax" class="form-control" placeholder="Budget" />
-                        <span class="input-group-text">€</span>
-                    </div>
-                </div>
-                <div class="col-md-2 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary w-100 fw-bold">
-                        <i class="bi bi-search"></i> Filtrer
-                    </button>
-                </div>
-            </form>
+
+    <form method="get" asp-action="Index" class="card p-3 shadow-sm border-0 mb-4 bg-light">
+        <div class="row g-2 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label small fw-bold text-muted">Recherche libre</label>
+                <input type="text" name="recherche" value="@Context.Request.Query["recherche"]" class="form-control" placeholder="Ex: Jardin, calme..." />
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label small fw-bold text-muted">Ville</label>
+                <input type="text" name="ville" value="@Context.Request.Query["ville"]" class="form-control" placeholder="Ex: Aix-en-Provence" />
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label small fw-bold text-muted">Type</label>
+                <select name="type" class="form-select">
+                    <option value="">Tous les types</option>
+                    <option value="Maison" selected="@(Context.Request.Query["type"] == "Maison" ? "selected" : null)">Maison</option>
+                    <option value="Appartement" selected="@(Context.Request.Query["type"] == "Appartement" ? "selected" : null)">Appartement</option>
+                    <option value="Terrain" selected="@(Context.Request.Query["type"] == "Terrain" ? "selected" : null)">Terrain</option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label small fw-bold text-muted">Agence Ymmo référente</label>
+                <select name="agenceId" class="form-select">
+                    <option value="">Toutes les agences</option>
+                    <option value="1" selected="@(Context.Request.Query["agenceId"] == "1" ? "selected" : null)">Siège social - Aix-en-Provence</option>
+                    <option value="2" selected="@(Context.Request.Query["agenceId"] == "2" ? "selected" : null)">Agence - Paris Centre</option>
+                    <option value="3" selected="@(Context.Request.Query["agenceId"] == "3" ? "selected" : null)">Agence - Lyon Lumière</option>
+                    <option value="4" selected="@(Context.Request.Query["agenceId"] == "4" ? "selected" : null)">Agence - Marseille Vieux-Port</option>
+                    <option value="5" selected="@(Context.Request.Query["agenceId"] == "5" ? "selected" : null)">Agence - Bordeaux Quinconces</option>
+                    <option value="6" selected="@(Context.Request.Query["agenceId"] == "6" ? "selected" : null)">Agence - Lille Grand-Place</option>
+                    <option value="7" selected="@(Context.Request.Query["agenceId"] == "7" ? "selected" : null)">Agence - Nantes Machines</option>
+                    <option value="8" selected="@(Context.Request.Query["agenceId"] == "8" ? "selected" : null)">Agence - Strasbourg Europe</option>
+                    <option value="9" selected="@(Context.Request.Query["agenceId"] == "9" ? "selected" : null)">Agence - Toulouse Capitole</option>
+                    <option value="10" selected="@(Context.Request.Query["agenceId"] == "10" ? "selected" : null)">Agence - Nice Promenade</option>
+                    <option value="11" selected="@(Context.Request.Query["agenceId"] == "11" ? "selected" : null)">Agence - Rennes République</option>
+                    <option value="12" selected="@(Context.Request.Query["agenceId"] == "12" ? "selected" : null)">Agence - Montpellier Comédie</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100 fw-bold">
+                    <i class="bi bi-search"></i> Filtrer
+                </button>
+            </div>
         </div>
-    </div>
+    </form>
 
     <div class="row">
         @foreach (var item in Model)
         {
             <div class="col-md-4 mb-4">
                 <div class="card h-100 shadow-sm border-0">
-                    <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="Bien immobilier">
+                    <img src="@item.ImageUrl" class="card-img-top" alt="@item.Titre" style="height: 200px; object-fit: cover;">
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-2">
                             <span class="badge bg-primary">@item.Type</span>
@@ -69,6 +83,7 @@
                             <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-dark btn-sm">Découvrir</a>
                         </div>
                     </div>
+                    
                     @if (User.Identity.IsAuthenticated)
                     {
                         <div class="card-footer bg-white border-top-0 pb-3 d-flex gap-2">

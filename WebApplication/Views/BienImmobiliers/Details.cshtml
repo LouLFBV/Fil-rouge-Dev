@@ -1,66 +1,93 @@
 ﻿@model WebApplication.Models.BienImmobilier
 
 @{
-    ViewData["Title"] = "Détails du bien - Ymmo";
-    Layout = "/Pages/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Détails - " + Model.Titre;
+
+    // Dictionnaire pour afficher le nom de l'agence au lieu d'un simple ID numérique
+    var agences = new Dictionary<int, string>
+    {
+        { 1, "Siège social - Aix-en-Provence" },
+        { 2, "Agence - Paris Centre" },
+        { 3, "Agence - Lyon Lumière" },
+        { 4, "Agence - Marseille Vieux-Port" },
+        { 5, "Agence - Bordeaux Quinconces" },
+        { 6, "Agence - Lille Grand-Place" },
+        { 7, "Agence - Nantes Machines" },
+        { 8, "Agence - Strasbourg Europe" },
+        { 9, "Agence - Toulouse Capitole" },
+        { 10, "Agence - Nice Promenade" },
+        { 11, "Agence - Rennes République" },
+        { 12, "Agence - Montpellier Comédie" }
+    };
+
+    string nomAgence = agences.ContainsKey(Model.AgenceId) ? agences[Model.AgenceId] : "Agence Inconnue";
 }
 
 <div class="container mt-4">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a asp-action="Index">Catalogue</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index" class="text-decoration-none">Catalogue</a></li>
             <li class="breadcrumb-item active" aria-current="page">Fiche détaillée</li>
         </ol>
     </nav>
 
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card shadow-sm border-0 mb-4">
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 mb-4 overflow-hidden">
+                <img src="@Model.ImageUrl" class="img-fluid w-100" alt="@Model.Titre" style="max-height: 450px; object-fit: cover;" />
+
                 <div class="card-body p-4">
                     <div class="d-flex justify-content-between align-items-start mb-3">
-                        <h1 class="text-primary mb-0">@Model.Titre</h1>
-                        <span class="badge bg-info text-dark fs-6">@Model.Type</span>
+                        <div>
+                            <h1 class="fw-bold text-primary mb-1">@Model.Titre</h1>
+                            <p class="text-muted fs-5"><i class="bi bi-geo-alt-fill text-danger"></i> @Model.Ville</p>
+                        </div>
+                        <span class="badge bg-info text-dark fw-bold fs-6 px-3 py-2">@Model.Type</span>
                     </div>
-                    <p class="text-muted"><i class="bi bi-geo-alt-fill text-danger"></i> @Model.Ville</p>
-                    <hr />
-                    <h5 class="fw-bold mt-4">Description du bien</h5>
-                    <p class="lead" style="white-space: pre-wrap;">@Model.Description</p>
+
+                    <hr class="text-muted opacity-25">
+
+                    <h4 class="fw-bold text-dark mb-3">Description du bien</h4>
+                    <p class="card-text text-secondary lh-base" style="white-space: pre-line;">@Model.Description</p>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-4">
-            <div class="card bg-primary text-white shadow-sm border-0 mb-4 text-center">
-                <div class="card-body py-4">
-                    <h2 class="mb-0 fw-bold">@Model.Prix.ToString("N0") €</h2>
-                    <small>Honoraires d'agence inclus</small>
-                </div>
+        <div class="col-lg-4">
+            <div class="card bg-primary text-white shadow-sm border-0 mb-4 text-center p-4">
+                <h2 class="fw-bold mb-0">@Model.Prix.ToString("N0") €</h2>
+                <small class="opacity-75">Honoraires d'agence inclus</small>
             </div>
 
             <div class="card shadow-sm border-0 mb-4">
-                <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span><i class="bi bi-arrows-fullscreen me-2"></i> Surface</span>
-                            <span class="fw-bold">@Model.Surface m²</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span><i class="bi bi-tag me-2"></i> Type</span>
-                            <span class="fw-bold">@Model.Type</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center text-muted">
-                            <span><i class="bi bi-hash me-2"></i> Réf. Agence</span>
-                            <span>@Model.AgenceId</span>
-                        </li>
-                    </ul>
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3 text-dark">Caractéristiques</h5>
+
+                    <div class="d-flex justify-content-between py-2 border-bottom">
+                        <span class="text-muted"><i class="bi bi-arrows-fullscreen me-2"></i> Surface</span>
+                        <span class="fw-bold">@Model.Surface m²</span>
+                    </div>
+
+                    <div class="d-flex justify-content-between py-2 border-bottom">
+                        <span class="text-muted"><i class="bi bi-house me-2"></i> Type</span>
+                        <span class="fw-bold">@Model.Type</span>
+                    </div>
+
+                    <div class="d-flex justify-content-between py-2">
+                        <span class="text-muted"><i class="bi bi-building me-2"></i> Agence référente</span>
+                        <span class="fw-bold text-end text-primary" style="max-width: 60%;">@nomAgence</span>
+                    </div>
                 </div>
             </div>
 
             <div class="d-grid gap-2">
-                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary btn-lg">
-                    <i class="bi bi-pencil"></i> Modifier la fiche
-                </a>
-                <a asp-action="Index" class="btn btn-light text-secondary">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary fw-bold shadow-sm">
+                        <i class="bi bi-pencil-square"></i> Modifier la fiche
+                    </a>
+                }
+                <a asp-action="Index" class="btn btn-light fw-bold text-muted border shadow-sm">
                     <i class="bi bi-arrow-left"></i> Retour au catalogue
                 </a>
             </div>

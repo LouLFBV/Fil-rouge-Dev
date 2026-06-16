@@ -21,37 +21,37 @@ namespace WebApplication.Controllers
         }
 
         // GET: BienImmobiliers
-        public async Task<IActionResult> Index(string searchString, string typeBien, int? prixMax, string ville)
+        public async Task<IActionResult> Index(string recherche, string ville, string type, int? agenceId)
         {
-            // On récupère la liste de base
-            var biens = from b in _context.BienImmobilier
-                        select b;
+            // 1. On récupère tous les biens de la base de données
+            var biensQuery = from b in _context.BienImmobilier select b;
 
-            // Filtre par Titre ou Description
-            if (!string.IsNullOrEmpty(searchString))
+            // 2. Filtre sur la recherche textuelle (titre/description)
+            if (!string.IsNullOrEmpty(recherche))
             {
-                biens = biens.Where(s => s.Titre.Contains(searchString) || s.Description.Contains(searchString));
+                biensQuery = biensQuery.Where(b => b.Titre!.Contains(recherche) || b.Description!.Contains(recherche));
             }
 
-            // Filtre par Ville
+            // 3. Filtre sur la ville
             if (!string.IsNullOrEmpty(ville))
             {
-                biens = biens.Where(x => x.Ville == ville);
+                biensQuery = biensQuery.Where(b => b.Ville!.Contains(ville));
             }
 
-            // Filtre par Type (Maison, Appartement...)
-            if (!string.IsNullOrEmpty(typeBien))
+            // 4. Filtre sur le type de bien
+            if (!string.IsNullOrEmpty(type))
             {
-                biens = biens.Where(x => x.Type == typeBien);
+                biensQuery = biensQuery.Where(b => b.Type == type);
             }
 
-            // Filtre par Prix Maximum
-            if (prixMax.HasValue)
+            // 5. NOUVEAU : Filtre strict sur l'ID de l'agence Ymmo
+            if (agenceId.HasValue)
             {
-                biens = biens.Where(x => x.Prix <= prixMax);
+                biensQuery = biensQuery.Where(b => b.AgenceId == agenceId.Value);
             }
 
-            return View(await biens.ToListAsync());
+            // On renvoie la liste filtrée finale à la vue du catalogue
+            return View(await biensQuery.ToListAsync());
         }
 
 
@@ -79,15 +79,18 @@ namespace WebApplication.Controllers
             return View();
         }
 
-        // POST: BienImmobiliers/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Titre,Description,Prix,Ville,Type,Surface,AgenceId")] BienImmobilier bienImmobilier)
+        public async Task<IActionResult> Create([Bind("Id,Titre,Description,Prix,Ville,Type,Surface,AgenceId,ImageUrl")] BienImmobilier bienImmobilier)
         {
             if (ModelState.IsValid)
             {
+                // Si l'utilisateur n'a pas mis de lien, on met une image de maison par défaut
+                if (string.IsNullOrEmpty(bienImmobilier.ImageUrl))
+                {
+                    bienImmobilier.ImageUrl = "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80";
+                }
+
                 _context.Add(bienImmobilier);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -111,12 +114,9 @@ namespace WebApplication.Controllers
             return View(bienImmobilier);
         }
 
-        // POST: BienImmobiliers/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Titre,Description,Prix,Ville,Type,Surface,AgenceId")] BienImmobilier bienImmobilier)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Titre,Description,Prix,Ville,Type,Surface,AgenceId,ImageUrl")] BienImmobilier bienImmobilier)
         {
             if (id != bienImmobilier.Id)
             {
@@ -127,6 +127,12 @@ namespace WebApplication.Controllers
             {
                 try
                 {
+                    // Sécurité : si le lien de l'image a été complètement effacé, on remet l'image par défaut
+                    if (string.IsNullOrEmpty(bienImmobilier.ImageUrl))
+                    {
+                        bienImmobilier.ImageUrl = "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80";
+                    }
+
                     _context.Update(bienImmobilier);
                     await _context.SaveChangesAsync();
                 }
