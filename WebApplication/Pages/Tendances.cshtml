@@ -1,0 +1,170 @@
+﻿@page
+@model WebApplication.Pages.TendancesModel
+@{
+    ViewData["Title"] = "Tendances du Marché Immobilier";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm border-0 mb-4 bg-dark text-white p-4">
+        <div class="d-flex align-items-center gap-3">
+            <div class="bg-primary text-white rounded p-3 fs-3">
+                <i class="bi bi-graph-up-arrow"></i>
+            </div>
+            <div>
+                <h1 class="fw-bold mb-1">Tendances du Marché</h1>
+                <p class="mb-0 text-muted">Statistiques et indicateurs décisionnels basés sur le catalogue Ymmo Pro</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100 bg-white p-3 border-start border-primary border-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted small fw-bold text-uppercase mb-1">Volume du catalogue</h6>
+                        <h2 class="fw-bold text-dark mb-0">@Model.TotalBiens biens</h2>
+                    </div>
+                    <div class="fs-1 text-primary opacity-25"><i class="bi bi-houses"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100 bg-white p-3 border-start border-success border-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted small fw-bold text-uppercase mb-1">Prix moyen constaté</h6>
+                        <h2 class="fw-bold text-success mb-0">@Model.PrixMoyen.ToString("N0") €</h2>
+                    </div>
+                    <div class="fs-1 text-success opacity-25"><i class="bi bi-currency-euro"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 h-100 bg-white p-3 border-start border-warning border-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted small fw-bold text-uppercase mb-1">Surface moyenne</h6>
+                        <h2 class="fw-bold text-warning mb-0">@Model.SurfaceMoyenne.ToString("N1") m²</h2>
+                    </div>
+                    <div class="fs-1 text-warning opacity-25"><i class="bi bi-arrows-fullscreen"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white py-3 border-0">
+                    <h5 class="fw-bold mb-0 text-dark"><i class="bi bi-geo-alt text-danger me-2"></i> Répartition par secteur géographique</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light text-muted small text-uppercase">
+                                <tr>
+                                    <th class="ps-4">Ville / Secteur</th>
+                                    <th class="text-center">Volume d'annonces</th>
+                                    <th class="text-end pe-4">Prix moyen calculé</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (!Model.StatsParVille.Any())
+                                {
+                                    <tr>
+                                        <td colspan="3" class="text-center text-muted py-4">Aucune donnée disponible pour le moment.</td>
+                                    </tr>
+                                }
+                                @foreach (var stat in Model.StatsParVille)
+                                {
+                                    <tr>
+                                        <td class="fw-bold text-secondary ps-4">@stat.NomVille</td>
+                                        <td class="text-center">
+                                            <span class="badge bg-light text-dark border px-3">@stat.NombreDeBiens</span>
+                                        </td>
+                                        <td class="text-end fw-bold text-primary pe-4">@stat.PrixMoyenVille.ToString("N0") €</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white py-3 border-0">
+                    <h5 class="fw-bold mb-0 text-dark"><i class="bi bi-pie-chart text-info me-2"></i> Typologie des actifs en stock</h5>
+                </div>
+                <div class="card-body">
+                    @if (!Model.StatsParType.Any())
+                    {
+                        <p class="text-center text-muted py-4">Aucun type enregistré.</p>
+                    }
+                    @foreach (var typeStat in Model.StatsParType)
+                    {
+                        // Petit calcul de pourcentage dynamique pour animer les barres Bootstrap
+                        int pourcentage = Model.TotalBiens > 0 ? (typeStat.NombreDeBiens * 100) / Model.TotalBiens : 0;
+
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between font-weight-bold mb-1">
+                                <span class="fw-bold text-secondary">@typeStat.NomType (@typeStat.NombreDeBiens)</span>
+                                <span class="text-muted fw-bold">Prix moyen : @typeStat.PrixMoyenType.ToString("N0") €</span>
+                            </div>
+                            <div class="progress" style="height: 12px;">
+                                <div class="progress-bar bg-info progress-bar-striped progress-bar-animated"
+                                     role="progressbar"
+                                     style="width: @pourcentage%"
+                                     aria-valuenow="@pourcentage"
+                                     aria-valuemin="0"
+                                     aria-valuemax="100">
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="alert alert-light border mt-4 mb-0">
+                        <small class="text-muted">
+                            <i class="bi bi-lightbulb text-warning me-1"></i>
+                            Ces graphiques sont mis à jour en temps réel à chaque fois qu'un de vos agents ajoute ou modifie un bien immobilier dans les agences distantes.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card shadow-sm border-0 mb-4 bg-light border-start border-info border-4 mt-4">
+        <div class="card-body p-4">
+            <div class="d-flex align-items-center gap-2 mb-3">
+                <h4 class="fw-bold text-dark mb-0"><i class="bi bi-cpu text-info"></i> Module d'Analyse Prédictive & Data Science (Python)</h4>
+            </div>
+            <p class="text-muted">
+                Les graphiques suivants sont générés par notre script d'intelligence artificielle. Il traite le volume de données récolté, nettoie les variables et applique un modèle de <strong>Régression Linéaire</strong> pour anticiper les prix du marché.
+            </p>
+
+            <div class="row g-4 mt-2">
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm bg-white h-100">
+                        <div class="card-header bg-white fw-bold border-0 py-3"><i class="bi bi-pie-chart-fill me-2 text-primary"></i>Répartition du Catalogue par Secteur</div>
+                        <div class="card-body text-center p-3">
+                            <img src="~/tendance_villes.png" class="img-fluid rounded" alt="Analyse des Secteurs" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm bg-white h-100">
+                        <div class="card-header bg-white fw-bold border-0 py-3"><i class="bi bi-graph-up-arrow me-2 text-success"></i>Modèle Prédictif (Estimation Automatique par IA)</div>
+                        <div class="card-body text-center p-3">
+                            <img src="~/predictions_ia.png" class="img-fluid rounded" alt="Prédictions Prix IA" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

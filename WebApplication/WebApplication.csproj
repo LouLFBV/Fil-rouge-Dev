@@ -24,4 +24,9 @@
     <Folder Include="Services\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\predictions_ia.png" />
+    <None Include="wwwroot\tendance_villes.png" />
+  </ItemGroup>
+
 </Project>
